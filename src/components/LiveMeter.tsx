@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { t, type Lang } from '@/lib/i18n';
 
 const RATE_PER_HOUR = 480_000;
 const DAY_MS = 8 * 3_600_000;
@@ -13,23 +14,22 @@ function hms(ms: number): string {
   return `${pad(Math.floor(total / 3600))}:${pad(Math.floor((total % 3600) / 60))}:${pad(total % 60)}`;
 }
 
-const MONEY = new Intl.NumberFormat('vi-VN', {
-  style: 'currency',
-  currency: 'VND',
-  maximumFractionDigits: 0,
-});
+const MONEY: Record<Lang, Intl.NumberFormat> = {
+  vi: new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }),
+  en: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }),
+};
 
 /**
  * The page's one loud element, and the product's characteristic moment: a clock
  * that is actually running and money that is actually accruing, a second at a
  * time. A screenshot of a timer is a picture of a timer; this is one.
  *
- * The first render is `BASE_MS` on both server and client so hydration matches;
- * ticking starts in the effect, and the elapsed time is derived from a mount
+ * First render is `BASE_MS` on both server and client so hydration matches;
+ * ticking starts in the effect, and elapsed time is derived from a mount
  * timestamp rather than accumulated, so a backgrounded tab catches up instead of
  * drifting behind.
  */
-export function LiveMeter() {
+export function LiveMeter({ lang }: { lang: Lang }) {
   const [elapsed, setElapsed] = useState(BASE_MS);
 
   useEffect(() => {
@@ -53,19 +53,19 @@ export function LiveMeter() {
         <span className="meter-chip">Koga Clothes</span>
         <span className="meter-live">
           <span className="meter-dot" aria-hidden />
-          đang chạy
+          {t(lang, 'meter.running')}
         </span>
       </div>
 
-      <div className="meter-clock" aria-live="off">{hms(elapsed)}</div>
-      <div className="meter-money">+ {MONEY.format(Math.round(earned))}</div>
+      <div className="meter-clock">{hms(elapsed)}</div>
+      <div className="meter-money">+ {MONEY[lang].format(Math.round(earned))}</div>
 
       <div className="meter-track" role="presentation">
         <div className="meter-fill" style={{ width: `${progress}%` }} />
       </div>
       <div className="meter-foot">
-        <span>480.000 ₫/giờ</span>
-        <span>{progress.toFixed(0)}% của 8h</span>
+        <span>{t(lang, 'meter.rate')}</span>
+        <span>{t(lang, 'meter.ofDay', { pct: progress.toFixed(0) })}</span>
       </div>
     </div>
   );

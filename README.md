@@ -3,16 +3,32 @@
 Marketing site for [Time Tracker](https://app.timetracker.io.vn), a time tracker
 and invoicing tool for freelancers.
 
-- **Live:** https://timetracker.io.vn
+- **Live:** https://timetracker.io.vn (vi) · https://timetracker.io.vn/en
 - **The app:** https://app.timetracker.io.vn ([repo](https://github.com/chuthuong2004/time-tracking))
 
 ## The idea
 
-The page is a timesheet. Each section is one beat of a working day, with the
-clock time in the left gutter, and the whole thing totals up at the bottom the
-way an invoice does — the amount being the pricing. The hero is a real running
-clock with money accruing by the second, because a screenshot of a timer is only
-a picture of a timer.
+The page is a timesheet. A ledger rail runs down the left with a clock time and
+a tick at each section — one per beat of a working day — and the whole thing
+totals up at the bottom the way an invoice does, where the amount is the pricing.
+The hero is a real running clock with money accruing by the second, because a
+screenshot of a timer is only a picture of a timer.
+
+## How it is built
+
+- **Two languages, two routes.** `/` is Vietnamese, `/en` is English, both
+  statically rendered with `hreflang` alternates. A client-side string swap would
+  leave one language invisible to crawlers, and this page exists to be found.
+- **Two themes, both chosen.** The light palette re-picks every step against a
+  paper surface rather than inverting the dark one. `data-theme` is set by an
+  inline script before first paint, so there is no flash.
+- **Theme-aware screenshots.** Each shot has a light and a dark capture; the two
+  URLs ride in custom properties and only the matching rule resolves, so the
+  browser fetches one image rather than both.
+- **Be Vietnam Pro** for everything except numbers. It is drawn for this
+  language, so ờ / ủ / ế / Đ hold up at display weight. JetBrains Mono takes the
+  clock and the rail timestamps; money stays in the sans, because the mono draws
+  ₫ with a stray crossbar and a monospace gap either side.
 
 Screenshots under `public/shots/` come from the real app. Payment details and the
 contact email are hidden before capture — they are real, and this page is public.

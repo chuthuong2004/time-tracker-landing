@@ -3,33 +3,71 @@
 /* ==========================================================================
    Time Tracker — landing page
 
-   The page is a timesheet. Sections sit in rows with a monospace clock time in
-   the left gutter, tick rules between them, and the whole thing totals up at the
-   bottom the way an invoice does. That structure is the product's own: hours in
-   a column, money on the right.
+   The page is a timesheet. A ledger rail runs down the left edge with a clock
+   time and a tick at each section, one per beat of a working day, and the whole
+   thing totals up at the bottom the way an invoice does — the amount being the
+   pricing.
 
-   Colour comes from the app itself — the same blue on actions, the same green on
-   money — plus one amber reserved for a single thing: something that is running.
+   Colour comes from the app itself: the same blue on actions, the same green on
+   money, plus one amber reserved for a single thing — something that is running.
+   Both themes are chosen, not flipped: the light one re-picks every step against
+   a paper surface rather than inverting the dark values.
    ========================================================================== */
 
 @theme {
-  --color-ink: #0a0b0e;
-  --color-surface: #14161b;
-  --color-surface-2: #1b1e25;
-  --color-hairline: rgba(255, 255, 255, 0.09);
-  --color-hairline-strong: rgba(255, 255, 255, 0.16);
+  --font-sans: var(--font-sans-vn), system-ui, sans-serif;
+  --font-mono: var(--font-mono-vn), ui-monospace, monospace;
+}
 
-  --color-paper: #f5f5f7;
-  --color-muted: #9aa0ab;
-  --color-faint: #6b7280;
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
 
-  --color-action: #2f6bf6;
-  --color-money: #34d058;
-  --color-live: #f0a12e;
+  --ink: #08090c;
+  --ink-2: #0d0f14;
+  --surface: #141821;
+  --surface-2: #1b2029;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.15);
 
-  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
-  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --text: #f2f4f8;
+  --muted: #98a1b0;
+  --faint: #656e7e;
+
+  --action: #3b7bff;
+  --action-ink: #ffffff;
+  --action-soft: rgba(59, 123, 255, 0.16);
+  --action-soft-text: #a6c2ff;
+  --money: #34d17a;
+  --live: #f5a524;
+
+  --shot-shadow: 0 40px 90px -46px rgba(0, 0, 0, 1);
+  --meter-glow: rgba(59, 123, 255, 0.16);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --ink: #ffffff;
+  --ink-2: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --hairline: rgba(9, 12, 20, 0.09);
+  --hairline-strong: rgba(9, 12, 20, 0.16);
+
+  --text: #10131a;
+  --muted: #56606f;
+  --faint: #79828f;
+
+  --action: #1f5fe0;
+  --action-ink: #ffffff;
+  --action-soft: rgba(31, 95, 224, 0.1);
+  --action-soft-text: #1b4fbb;
+  --money: #12874c;
+  --live: #b06d05;
+
+  --shot-shadow: 0 26px 54px -34px rgba(9, 12, 20, 0.4);
+  --meter-glow: rgba(31, 95, 224, 0.09);
 }
 
 * {
@@ -37,74 +75,143 @@
 }
 
 html {
-  color-scheme: dark;
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--ink);
+  color: var(--text);
   font-family: var(--font-sans);
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.62;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: color-mix(in oklab, var(--color-action) 40%, transparent);
+  background: color-mix(in oklab, var(--action) 40%, transparent);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-action);
+  outline: 2px solid var(--action);
   outline-offset: 3px;
   border-radius: 4px;
 }
 
-/* Every number on this page is data — keep the columns straight. */
-.num {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
+/* ---------- Type ----------
+   One family at four jobs. Headlines run heavy and tight; Be Vietnam Pro holds
+   its diacritics at that weight, which is the whole reason it is here. */
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  text-wrap: balance;
 }
 
-/* ---------- The timesheet grid ----------
-   One row per beat of the day. The gutter is the clock; it only appears once the
-   viewport is wide enough to hold it without squeezing the prose. */
+h1 {
+  font-size: clamp(2.2rem, 4.6vw, 3.1rem);
+  letter-spacing: -0.036em;
+}
+
+/* In the two-column hero the headline only owns half the width, so the fluid
+   step has to be read against that column and not the viewport — otherwise the
+   explicit line break lands on top of a wrap and the title breaks three ways. */
+@media (min-width: 1040px) {
+  .hero h1 {
+    font-size: clamp(2.4rem, 2.9vw, 3.05rem);
+  }
+}
+
+h2 {
+  font-size: clamp(1.65rem, 3.1vw, 2.2rem);
+}
+
+h3 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.4;
+}
+
+p {
+  margin: 0;
+}
+
+.lede {
+  max-width: 48ch;
+  margin-top: 18px;
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* ---------- Shell ---------- */
 
 .sheet {
   width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding-inline: 20px;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 22px;
 }
+
+/* ---------- The ledger rail ----------
+   Not decoration: the times are the order in which a real day hits these
+   features, and the hairline is the left edge of the sheet they are logged on. */
 
 .row {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  border-top: 1px solid var(--color-hairline);
-  padding-block: 72px;
+  padding-block: 64px;
+  border-top: 1px solid var(--hairline);
 }
 
-/* The masthead already draws a rule; a second one right under it reads as a
-   mistake rather than as the first row of the sheet. */
 .row:first-of-type {
   border-top: 0;
-  padding-top: 60px;
+  padding-top: 48px;
 }
 
 .row-gutter {
   display: none;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 940px) {
   .row {
-    grid-template-columns: 128px minmax(0, 1fr);
+    grid-template-columns: 118px minmax(0, 1fr);
+    padding-block: 88px;
   }
 
   .row-gutter {
+    position: relative;
     display: block;
-    padding-top: 6px;
+    padding-top: 5px;
+  }
+
+  /* The tick that marks this entry on the rail. */
+  .row-gutter::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 32px;
+    width: 22px;
+    height: 1px;
+    background: var(--hairline-strong);
   }
 }
 
@@ -112,62 +219,17 @@ body {
   display: block;
   font-family: var(--font-mono);
   font-size: 13px;
-  letter-spacing: 0.02em;
-  color: var(--color-faint);
+  font-weight: 500;
+  color: var(--muted);
 }
 
 .gutter-note {
   display: block;
-  margin-top: 6px;
+  margin-top: 7px;
+  padding-right: 24px;
   font-size: 12px;
-  line-height: 1.45;
-  color: color-mix(in oklab, var(--color-faint) 78%, transparent);
-}
-
-/* ---------- Type scale ---------- */
-
-h1,
-h2,
-h3 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.032em;
-  line-height: 1.07;
-  margin: 0;
-  text-wrap: balance;
-}
-
-h1 {
-  font-size: clamp(2.4rem, 6.4vw, 4.1rem);
-}
-
-h2 {
-  font-size: clamp(1.75rem, 3.6vw, 2.5rem);
-}
-
-h3 {
-  font-size: 1.0625rem;
-  letter-spacing: -0.015em;
-  line-height: 1.35;
-}
-
-.lede {
-  max-width: 46ch;
-  margin: 20px 0 0;
-  font-size: clamp(1rem, 1.6vw, 1.1875rem);
-  color: var(--color-muted);
-  text-wrap: pretty;
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-faint);
+  line-height: 1.5;
+  color: var(--faint);
 }
 
 /* ---------- Controls ---------- */
@@ -178,34 +240,34 @@ h3 {
   justify-content: center;
   gap: 9px;
   height: 48px;
-  padding-inline: 22px;
+  padding-inline: 24px;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: 11px;
   font-family: var(--font-sans);
   font-size: 15px;
-  font-weight: 550;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+  transition: background-color 140ms ease, border-color 140ms ease, transform 120ms ease;
 }
 
 .btn-primary {
-  background: var(--color-action);
-  color: #fff;
+  background: var(--action);
+  color: var(--action-ink);
 }
 
 .btn-primary:hover {
-  background: color-mix(in oklab, var(--color-action) 88%, white);
+  background: color-mix(in oklab, var(--action) 88%, black);
 }
 
 .btn-ghost {
-  border-color: var(--color-hairline-strong);
-  color: var(--color-paper);
+  border-color: var(--hairline-strong);
+  color: var(--text);
 }
 
 .btn-ghost:hover {
-  border-color: color-mix(in oklab, var(--color-paper) 40%, transparent);
-  background: rgba(255, 255, 255, 0.04);
+  border-color: color-mix(in oklab, var(--text) 40%, transparent);
+  background: color-mix(in oklab, var(--text) 5%, transparent);
 }
 
 .btn:active {
@@ -214,60 +276,154 @@ h3 {
 
 .btn-sm {
   height: 38px;
-  padding-inline: 15px;
+  padding-inline: 16px;
   font-size: 14px;
   border-radius: 9px;
 }
 
-/* ---------- Screenshot frames ----------
-   No laptop bezel, no perspective tilt. The app already draws its own rounded
-   cards; the frame is a hairline and a shadow, so what you see is the product. */
-
-.shot {
-  position: relative;
-  margin-top: 34px;
-  border: 1px solid var(--color-hairline);
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--color-surface);
-  box-shadow: 0 34px 80px -40px rgba(0, 0, 0, 0.9);
+/* Square siblings of .btn-sm: the theme toggle and the language switch. */
+.icon-btn,
+.lang-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  min-width: 38px;
+  padding-inline: 10px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease;
 }
 
-.shot img {
-  display: block;
-  width: 100%;
-  height: auto;
+.icon-btn:hover,
+.lang-btn:hover {
+  border-color: color-mix(in oklab, var(--text) 38%, transparent);
+  background: color-mix(in oklab, var(--text) 5%, transparent);
 }
 
-.shot-paper {
-  background: #fff;
-  padding: 22px;
-}
-
-.shot-caption {
+.actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 14px;
-  margin-top: 12px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--color-faint);
+  gap: 12px;
+  margin-top: 30px;
 }
 
-/* ---------- Hero meter ----------
-   The one loud element on the page: a real clock, running, with real money
-   accruing beside it. Everything else stays quiet so this reads first. */
+.fineprint {
+  margin-top: 14px;
+  font-size: 13.5px;
+  color: var(--faint);
+}
+
+/* ---------- Hero ----------
+   Copy and the live meter hold the left; the product runs off the right edge, so
+   the fold shows the thing itself rather than a promise of it. */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 44px;
+  align-items: center;
+}
+
+@media (min-width: 1040px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+    gap: 52px;
+  }
+
+  /* Bleed past the sheet so the app reads as bigger than the page. */
+  .hero-shot {
+    width: calc(100% + 90px);
+  }
+}
+
+/* ---------- Screenshot panels ----------
+   Detail crops, not whole-page thumbnails: a screenshot you cannot read is
+   decoration. Each panel is sized so the app's own 14px text stays legible. */
+
+.panel {
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--ink-2);
+}
+
+.panel-img {
+  display: block;
+  width: 100%;
+  background-size: 100% auto;
+  background-position: top center;
+  background-repeat: no-repeat;
+}
+
+:root[data-theme="dark"] .panel-img {
+  background-image: var(--shot-dark);
+}
+
+:root[data-theme="light"] .panel-img {
+  background-image: var(--shot-light);
+}
+
+.hero-shot {
+  border-radius: 16px;
+  box-shadow: var(--shot-shadow);
+}
+
+.panel-paper {
+  background: #fff;
+  padding: 20px 20px 4px;
+}
+
+.panel-stack {
+  display: grid;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.panel-pair {
+  display: grid;
+  gap: 16px;
+  margin-top: 32px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 860px) {
+  .panel-pair {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 14px;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--faint);
+}
+
+/* ---------- Live meter ---------- */
 
 .meter {
   position: relative;
   overflow: hidden;
-  margin-top: 38px;
-  padding: 26px 28px 28px;
-  border: 1px solid var(--color-hairline);
+  margin-top: 34px;
+  padding: 22px 24px 24px;
+  border: 1px solid var(--hairline);
   border-radius: 16px;
   background:
-    radial-gradient(120% 140% at 0% 0%, rgba(47, 107, 246, 0.13), transparent 58%),
-    var(--color-surface);
+    radial-gradient(130% 150% at 0% 0%, var(--meter-glow), transparent 60%),
+    var(--surface);
 }
 
 .meter-head {
@@ -275,20 +431,19 @@ h3 {
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .meter-chip {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
   height: 26px;
   padding-inline: 11px;
   border-radius: 7px;
-  background: rgba(47, 107, 246, 0.15);
-  color: #9dbaff;
+  background: var(--action-soft);
+  color: var(--action-soft-text);
   font-size: 12.5px;
-  font-weight: 550;
+  font-weight: 600;
 }
 
 .meter-live {
@@ -296,10 +451,11 @@ h3 {
   align-items: center;
   gap: 7px;
   font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.1em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--color-live);
+  color: var(--live);
 }
 
 .meter-dot {
@@ -312,39 +468,42 @@ h3 {
 
 @keyframes breathe {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.26; }
+  50% { opacity: 0.25; }
 }
 
 .meter-clock {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  font-size: clamp(2.6rem, 8vw, 4.25rem);
+  font-size: clamp(2.5rem, 6.2vw, 3.5rem);
   font-weight: 500;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.035em;
   line-height: 1;
 }
 
+/* Money stays in the sans: JetBrains Mono draws ₫ with a stray crossbar and a
+   full monospace advance either side of it, so an amount reads as two things
+   with a gap. Tabular figures keep the column straight without the mono. */
 .meter-money {
-  margin-top: 10px;
-  font-family: var(--font-mono);
+  margin-top: 9px;
   font-variant-numeric: tabular-nums;
-  font-size: clamp(1.05rem, 2.4vw, 1.375rem);
+  letter-spacing: -0.01em;
+  font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: 500;
-  color: var(--color-money);
+  color: var(--money);
 }
 
 .meter-track {
-  margin-top: 22px;
+  margin-top: 20px;
   height: 4px;
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in oklab, var(--text) 12%, transparent);
   overflow: hidden;
 }
 
 .meter-fill {
   height: 100%;
   border-radius: 99px;
-  background: var(--color-action);
+  background: var(--action);
   transition: width 900ms linear;
 }
 
@@ -353,34 +512,48 @@ h3 {
   justify-content: space-between;
   gap: 12px;
   margin-top: 10px;
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  color: var(--color-faint);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--faint);
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 32px;
+/* ---------- Invoice slab ----------
+   The product's print view is white paper; on a white page it would float, so it
+   gets a surround in both themes. */
+
+.slab {
+  background: var(--ink-2);
+  border-block: 1px solid var(--hairline);
 }
 
-.hero-fineprint {
-  margin: 14px 0 0;
-  font-size: 13.5px;
-  color: var(--color-faint);
+.slab .row {
+  border-top: 0;
 }
 
-/* ---------- Feature list ---------- */
+.invoice-layout {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .invoice-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 44px;
+    align-items: center;
+  }
+}
+
+/* ---------- Feature grid ---------- */
 
 .features {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1px;
   margin-top: 34px;
-  border: 1px solid var(--color-hairline);
+  border: 1px solid var(--hairline);
   border-radius: 14px;
-  background: var(--color-hairline);
+  background: var(--hairline);
   overflow: hidden;
 }
 
@@ -398,46 +571,47 @@ h3 {
 
 .feature {
   padding: 22px 22px 24px;
-  background: var(--color-ink);
+  background: var(--ink);
 }
 
 .feature p {
-  margin: 8px 0 0;
+  margin-top: 8px;
   font-size: 14.5px;
-  color: var(--color-muted);
+  color: var(--muted);
 }
 
 .feature-key {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 13px;
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-faint);
+  color: var(--faint);
 }
 
-/* ---------- Keyboard keys ---------- */
+/* ---------- Shortcuts ---------- */
 
 kbd {
   display: inline-block;
-  min-width: 24px;
+  min-width: 25px;
   padding: 2px 7px;
-  border: 1px solid var(--color-hairline-strong);
+  border: 1px solid var(--hairline-strong);
   border-bottom-width: 2px;
   border-radius: 6px;
-  background: var(--color-surface-2);
+  background: var(--surface-2);
   font-family: var(--font-mono);
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.45;
   text-align: center;
-  color: var(--color-paper);
+  color: var(--text);
 }
 
 .shortcuts {
   display: grid;
-  gap: 10px;
-  margin: 26px 0 0;
+  gap: 11px;
+  margin: 28px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -445,28 +619,28 @@ kbd {
 .shortcuts li {
   display: flex;
   align-items: baseline;
-  gap: 12px;
+  gap: 13px;
   font-size: 14.5px;
-  color: var(--color-muted);
+  color: var(--muted);
 }
 
-.shortcuts span {
+.shortcuts b {
   flex: 0 0 auto;
   display: inline-flex;
   gap: 4px;
 }
 
-/* ---------- The total line ----------
-   The page bills itself. Same shape as the invoice footer in the product, same
-   right-aligned amount — and the amount is zero, which is the pricing. */
+/* ---------- Total line ----------
+   The page bills itself, in the shape of the invoice footer the product prints,
+   and the amount is the pricing. */
 
 .total {
-  padding-block: 64px 92px;
+  padding-block: 60px 96px;
 }
 
 .total-rule {
   height: 1px;
-  background: var(--color-hairline-strong);
+  background: var(--hairline-strong);
 }
 
 .total-line {
@@ -479,30 +653,30 @@ kbd {
 
 .total-label {
   font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-faint);
+  color: var(--faint);
 }
 
 .total-amount {
-  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
-  font-weight: 500;
+  font-size: clamp(1.7rem, 4.4vw, 2.5rem);
+  font-weight: 700;
   letter-spacing: -0.03em;
-  color: var(--color-money);
+  color: var(--money);
 }
 
-/* ---------- Header / footer ---------- */
+/* ---------- Masthead / colophon ---------- */
 
 .masthead {
   position: sticky;
   top: 0;
   z-index: 20;
-  border-bottom: 1px solid var(--color-hairline);
-  background: color-mix(in oklab, var(--color-ink) 86%, transparent);
-  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--hairline);
+  background: color-mix(in oklab, var(--ink) 88%, transparent);
+  backdrop-filter: blur(16px);
 }
 
 .masthead-inner {
@@ -510,47 +684,52 @@ kbd {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  height: 62px;
+  height: 64px;
 }
 
 .masthead-nav {
   display: none;
-  gap: 26px;
+  gap: 28px;
   font-size: 14.5px;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 860px) {
   .masthead-nav {
     display: flex;
   }
 }
 
 .masthead-nav a {
-  color: var(--color-muted);
+  color: var(--muted);
   text-decoration: none;
 }
 
 .masthead-nav a:hover {
-  color: var(--color-paper);
+  color: var(--text);
+}
+
+.masthead-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .wordmark {
   display: inline-flex;
   align-items: baseline;
-  font-family: var(--font-display);
   font-size: 17px;
   letter-spacing: -0.035em;
   white-space: nowrap;
 }
 
 .wordmark-time {
-  font-weight: 400;
-  color: var(--color-muted);
+  font-weight: 500;
+  color: var(--muted);
 }
 
 .wordmark-tracker {
-  font-weight: 700;
-  color: var(--color-action);
+  font-weight: 800;
+  color: var(--action);
 }
 
 .brand {
@@ -563,18 +742,18 @@ kbd {
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
+  width: 27px;
+  height: 27px;
   border-radius: 8px;
-  background: var(--color-action);
+  background: var(--action);
   color: #fff;
 }
 
 .colophon {
-  border-top: 1px solid var(--color-hairline);
-  padding-block: 30px 44px;
+  border-top: 1px solid var(--hairline);
+  padding-block: 30px 46px;
   font-size: 13.5px;
-  color: var(--color-faint);
+  color: var(--faint);
 }
 
 .colophon-inner {
@@ -582,16 +761,69 @@ kbd {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 16px;
 }
 
 .colophon a {
-  color: var(--color-muted);
+  color: var(--muted);
   text-decoration: none;
 }
 
 .colophon a:hover {
-  color: var(--color-paper);
+  color: var(--text);
+}
+
+.colophon-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+/* ---------- Legal pages ---------- */
+
+.doc {
+  max-width: 68ch;
+  padding-block: 56px 88px;
+}
+
+.doc h1 {
+  font-size: clamp(1.9rem, 4vw, 2.4rem);
+}
+
+.doc h2 {
+  margin-top: 40px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.doc p,
+.doc li {
+  margin-top: 14px;
+  color: var(--muted);
+}
+
+.doc ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.doc a {
+  color: var(--action);
+}
+
+.doc code {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.doc-meta {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--faint);
 }
 
 @media (prefers-reduced-motion: reduce) {
