@@ -76,20 +76,14 @@ export function LandingPage({ lang }: { lang: Lang }) {
                 <p className="fineprint">{t(lang, 'hero.fineprint')}</p>
               </div>
 
-              <div className="panel hero-shot">
-                <div
-                  className="panel-img"
-                  role="img"
-                  aria-label={t(lang, 'hero.shotAlt')}
-                  style={
-                    {
-                      '--shot-dark': 'url(/shots/crop-timer.webp)',
-                      '--shot-light': 'url(/shots/lcrop-timer.webp)',
-                      aspectRatio: '1200 / 820',
-                    } as React.CSSProperties
-                  }
-                />
-              </div>
+              <Shot
+                name="timer"
+                lang={lang}
+                alt={t(lang, 'hero.shotAlt')}
+                width={1200}
+                height={820}
+                className="panel hero-shot"
+              />
             </div>
           </Row>
 
@@ -97,8 +91,8 @@ export function LandingPage({ lang }: { lang: Lang }) {
             <h2>{t(lang, 'dash.title')}</h2>
             <p className="lede">{t(lang, 'dash.lede')}</p>
             <div className="panel-stack">
-              <Shot name="crop-stats" alt={t(lang, 'dash.statsAlt')} width={928} height={137} />
-              <Shot name="crop-chart" alt={t(lang, 'dash.chartAlt')} width={928} height={316} />
+              <Shot name="stats" lang={lang} alt={t(lang, 'dash.statsAlt')} width={928} height={137} />
+              <Shot name="chart" lang={lang} alt={t(lang, 'dash.chartAlt')} width={928} height={316} />
             </div>
             <Caption items={[t(lang, 'dash.cap1'), t(lang, 'dash.cap2'), t(lang, 'dash.cap3')]} />
           </Row>
@@ -108,11 +102,11 @@ export function LandingPage({ lang }: { lang: Lang }) {
             <p className="lede">{t(lang, 'log.lede')}</p>
             <div className="panel-pair">
               <div>
-                <Shot name="crop-entries" alt={t(lang, 'log.tableAlt')} width={928} height={549} />
+                <Shot name="entries" lang={lang} alt={t(lang, 'log.tableAlt')} width={928} height={549} />
                 <Caption items={[t(lang, 'log.cap1'), t(lang, 'log.cap2')]} />
               </div>
               <div>
-                <Shot name="crop-donut" alt={t(lang, 'log.donutAlt')} width={456} height={432} />
+                <Shot name="donut" lang={lang} alt={t(lang, 'log.donutAlt')} width={456} height={432} />
                 <Caption items={[t(lang, 'log.cap3'), t(lang, 'log.cap4')]} />
               </div>
             </div>
@@ -128,7 +122,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
                   <p className="lede">{t(lang, 'inv.lede')}</p>
                   <Caption items={[t(lang, 'inv.cap1'), t(lang, 'inv.cap2'), t(lang, 'inv.cap3')]} />
                 </div>
-                <Shot name="invoice-doc" alt={t(lang, 'inv.alt')} width={748} height={663} paper />
+                <Shot name="invoice" lang={lang} alt={t(lang, 'inv.alt')} width={748} height={663} paper />
               </div>
             </Row>
           </div>
@@ -139,8 +133,8 @@ export function LandingPage({ lang }: { lang: Lang }) {
             <h2>{t(lang, 'rep.title')}</h2>
             <p className="lede">{t(lang, 'rep.lede')}</p>
             <div className="panel-stack">
-              <Shot name="crop-repstats" alt={t(lang, 'rep.statsAlt')} width={928} height={214} />
-              <Shot name="crop-reptable" alt={t(lang, 'rep.tableAlt')} width={928} height={427} />
+              <Shot name="repstats" lang={lang} alt={t(lang, 'rep.statsAlt')} width={928} height={214} />
+              <Shot name="reptable" lang={lang} alt={t(lang, 'rep.tableAlt')} width={928} height={427} />
             </div>
             <Caption items={[t(lang, 'rep.cap1'), t(lang, 'rep.cap2'), t(lang, 'rep.cap3')]} />
           </Row>

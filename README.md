@@ -22,16 +22,21 @@ screenshot of a timer is only a picture of a timer.
 - **Two themes, both chosen.** The light palette re-picks every step against a
   paper surface rather than inverting the dark one. `data-theme` is set by an
   inline script before first paint, so there is no flash.
-- **Theme-aware screenshots.** Each shot has a light and a dark capture; the two
-  URLs ride in custom properties and only the matching rule resolves, so the
-  browser fetches one image rather than both.
+- **Screenshots in four variants.** Each shot is captured per language and per
+  theme, so the English page shows an English app rather than a Vietnamese one
+  under English headings. The two theme URLs ride in custom properties and only
+  the matching rule resolves, so a visitor fetches ~150KB — one variant — not all
+  four.
 - **Be Vietnam Pro** for everything except numbers. It is drawn for this
   language, so ờ / ủ / ế / Đ hold up at display weight. JetBrains Mono takes the
   clock and the rail timestamps; money stays in the sans, because the mono draws
   ₫ with a stray crossbar and a monospace gap either side.
 
-Screenshots under `public/shots/` come from the real app. Payment details and the
-contact email are hidden before capture — they are real, and this page is public.
+Screenshots under `public/shots/` come from the real app, running a dataset built
+from a real backup with the identifying parts rewritten: client and project names
+are generic, the issuer block is a placeholder, and payment details are blank.
+Hours, rates and invoice numbers are untouched, because that is what makes the
+shots look like an actual workload rather than a fixture.
 
 ## Local
 
