@@ -50,7 +50,7 @@ export function LiveMeter({ lang }: { lang: Lang }) {
   return (
     <div className="meter">
       <div className="meter-head">
-        <span className="meter-chip">Koga Clothes</span>
+        <span className="meter-chip">Northwind Retail</span>
         <span className="meter-live">
           <span className="meter-dot" aria-hidden />
           {t(lang, 'meter.running')}
