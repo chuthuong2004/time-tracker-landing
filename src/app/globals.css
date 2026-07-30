@@ -1,26 +1,609 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   Time Tracker — landing page
+
+   The page is a timesheet. Sections sit in rows with a monospace clock time in
+   the left gutter, tick rules between them, and the whole thing totals up at the
+   bottom the way an invoice does. That structure is the product's own: hours in
+   a column, money on the right.
+
+   Colour comes from the app itself — the same blue on actions, the same green on
+   money — plus one amber reserved for a single thing: something that is running.
+   ========================================================================== */
+
+@theme {
+  --color-ink: #0a0b0e;
+  --color-surface: #14161b;
+  --color-surface-2: #1b1e25;
+  --color-hairline: rgba(255, 255, 255, 0.09);
+  --color-hairline-strong: rgba(255, 255, 255, 0.16);
+
+  --color-paper: #f5f5f7;
+  --color-muted: #9aa0ab;
+  --color-faint: #6b7280;
+
+  --color-action: #2f6bf6;
+  --color-money: #34d058;
+  --color-live: #f0a12e;
+
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-action) 40%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Every number on this page is data — keep the columns straight. */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- The timesheet grid ----------
+   One row per beat of the day. The gutter is the clock; it only appears once the
+   viewport is wide enough to hold it without squeezing the prose. */
+
+.sheet {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-inline: 20px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1px solid var(--color-hairline);
+  padding-block: 72px;
+}
+
+/* The masthead already draws a rule; a second one right under it reads as a
+   mistake rather than as the first row of the sheet. */
+.row:first-of-type {
+  border-top: 0;
+  padding-top: 60px;
+}
+
+.row-gutter {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .row {
+    grid-template-columns: 128px minmax(0, 1fr);
+  }
+
+  .row-gutter {
+    display: block;
+    padding-top: 6px;
+  }
+}
+
+.gutter-time {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--color-faint);
+}
+
+.gutter-note {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: color-mix(in oklab, var(--color-faint) 78%, transparent);
+}
+
+/* ---------- Type scale ---------- */
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.032em;
+  line-height: 1.07;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 6.4vw, 4.1rem);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+}
+
+h3 {
+  font-size: 1.0625rem;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+.lede {
+  max-width: 46ch;
+  margin: 20px 0 0;
+  font-size: clamp(1rem, 1.6vw, 1.1875rem);
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+/* ---------- Controls ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 48px;
+  padding-inline: 22px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 550;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.btn-primary {
+  background: var(--color-action);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: color-mix(in oklab, var(--color-action) 88%, white);
+}
+
+.btn-ghost {
+  border-color: var(--color-hairline-strong);
+  color: var(--color-paper);
+}
+
+.btn-ghost:hover {
+  border-color: color-mix(in oklab, var(--color-paper) 40%, transparent);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-sm {
+  height: 38px;
+  padding-inline: 15px;
+  font-size: 14px;
+  border-radius: 9px;
+}
+
+/* ---------- Screenshot frames ----------
+   No laptop bezel, no perspective tilt. The app already draws its own rounded
+   cards; the frame is a hairline and a shadow, so what you see is the product. */
+
+.shot {
+  position: relative;
+  margin-top: 34px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: 0 34px 80px -40px rgba(0, 0, 0, 0.9);
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.shot-paper {
+  background: #fff;
+  padding: 22px;
+}
+
+.shot-caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-faint);
+}
+
+/* ---------- Hero meter ----------
+   The one loud element on the page: a real clock, running, with real money
+   accruing beside it. Everything else stays quiet so this reads first. */
+
+.meter {
+  position: relative;
+  overflow: hidden;
+  margin-top: 38px;
+  padding: 26px 28px 28px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 16px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(47, 107, 246, 0.13), transparent 58%),
+    var(--color-surface);
+}
+
+.meter-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.meter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 26px;
+  padding-inline: 11px;
+  border-radius: 7px;
+  background: rgba(47, 107, 246, 0.15);
+  color: #9dbaff;
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+.meter-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-live);
+}
+
+.meter-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: breathe 2s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.26; }
+}
+
+.meter-clock {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2.6rem, 8vw, 4.25rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.meter-money {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.05rem, 2.4vw, 1.375rem);
+  font-weight: 500;
+  color: var(--color-money);
+}
+
+.meter-track {
+  margin-top: 22px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--color-action);
+  transition: width 900ms linear;
+}
+
+.meter-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--color-faint);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.hero-fineprint {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  color: var(--color-faint);
+}
+
+/* ---------- Feature list ---------- */
+
+.features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  margin-top: 34px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 14px;
+  background: var(--color-hairline);
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1000px) {
+  .features {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.feature {
+  padding: 22px 22px 24px;
+  background: var(--color-ink);
+}
+
+.feature p {
+  margin: 8px 0 0;
+  font-size: 14.5px;
+  color: var(--color-muted);
+}
+
+.feature-key {
+  display: block;
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+/* ---------- Keyboard keys ---------- */
+
+kbd {
+  display: inline-block;
+  min-width: 24px;
+  padding: 2px 7px;
+  border: 1px solid var(--color-hairline-strong);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--color-surface-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--color-paper);
+}
+
+.shortcuts {
+  display: grid;
+  gap: 10px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shortcuts li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 14.5px;
+  color: var(--color-muted);
+}
+
+.shortcuts span {
+  flex: 0 0 auto;
+  display: inline-flex;
+  gap: 4px;
+}
+
+/* ---------- The total line ----------
+   The page bills itself. Same shape as the invoice footer in the product, same
+   right-aligned amount — and the amount is zero, which is the pricing. */
+
+.total {
+  padding-block: 64px 92px;
+}
+
+.total-rule {
+  height: 1px;
+  background: var(--color-hairline-strong);
+}
+
+.total-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 18px;
+}
+
+.total-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.total-amount {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--color-money);
+}
+
+/* ---------- Header / footer ---------- */
+
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--color-hairline);
+  background: color-mix(in oklab, var(--color-ink) 86%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.masthead-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 62px;
+}
+
+.masthead-nav {
+  display: none;
+  gap: 26px;
+  font-size: 14.5px;
+}
+
+@media (min-width: 760px) {
+  .masthead-nav {
+    display: flex;
+  }
+}
+
+.masthead-nav a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.masthead-nav a:hover {
+  color: var(--color-paper);
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-size: 17px;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+.wordmark-time {
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+.wordmark-tracker {
+  font-weight: 700;
+  color: var(--color-action);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--color-action);
+  color: #fff;
+}
+
+.colophon {
+  border-top: 1px solid var(--color-hairline);
+  padding-block: 30px 44px;
+  font-size: 13.5px;
+  color: var(--color-faint);
+}
+
+.colophon-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.colophon a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.colophon a:hover {
+  color: var(--color-paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
