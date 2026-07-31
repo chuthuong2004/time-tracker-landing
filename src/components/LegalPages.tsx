@@ -82,6 +82,42 @@ export function PrivacyPage({ lang }: { lang: Lang }) {
         </li>
       </ul>
 
+      <h2>{vi ? 'Tiện ích mở rộng cho Chrome' : 'The Chrome extension'}</h2>
+      <p>
+        {vi
+          ? 'Tiện ích mở rộng bấm giờ nhanh không tạo một tài khoản riêng. Một content script trên app.timetracker.io.vn đọc phiên đăng nhập mà app đã lưu, rồi dùng đúng phiên đó — không có màn hình đăng nhập nào khác, và không có dữ liệu nào được thu thập ngoài những gì mục ở trên đã nói.'
+          : 'The quick-tap browser extension does not create a separate account. A content script on app.timetracker.io.vn reads the session the app already stored and uses that same session — there is no separate sign-in screen, and nothing is collected beyond what the section above already covers.'}
+      </p>
+      <ul>
+        <li>
+          <strong>storage</strong>
+          {vi
+            ? ' — giữ phiên đăng nhập và một bản sao dữ liệu gần nhất trong máy, để mở popup lên là thấy ngay.'
+            : ' — holds the session and a local copy of recent data, so opening the popup shows something immediately.'}
+        </li>
+        <li>
+          <strong>alarms</strong>
+          {vi
+            ? ' — chạy đồng hồ Pomodoro và làm mới dữ liệu định kỳ, kể cả khi popup đang đóng.'
+            : ' — runs the Pomodoro clock and refreshes data periodically, even while the popup is closed.'}
+        </li>
+        <li>
+          <strong>notifications</strong>
+          {vi ? ' — báo khi hết một phiên Pomodoro.' : ' — alerts when a Pomodoro session ends.'}
+        </li>
+        <li>
+          <strong>{vi ? 'Quyền truy cập app.timetracker.io.vn' : 'Access to app.timetracker.io.vn'}</strong>
+          {vi
+            ? ' — chỉ dùng để đọc phiên đăng nhập nói trên và để mở/focus lại tab app khi bạn bấm nút mở app. Không truy cập trang nào khác.'
+            : ' — used only to read the session above and to open or focus the app tab when you click "open app". No other site is touched.'}
+        </li>
+      </ul>
+      <p>
+        {vi
+          ? 'Gỡ tiện ích không xoá gì khỏi tài khoản của bạn — dữ liệu vẫn nằm nguyên trong app, vì tiện ích chưa từng giữ một bản riêng nào ngoài cache cục bộ nói trên.'
+          : 'Removing the extension deletes nothing from your account — your data stays exactly where it is in the app, since the extension never held a separate copy of anything beyond the local cache above.'}
+      </p>
+
       <h2>Cookie</h2>
       <p>
         {vi
