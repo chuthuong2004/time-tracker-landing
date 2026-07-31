@@ -382,6 +382,54 @@ p {
   padding: 20px 20px 4px;
 }
 
+/* On a phone a 928px-wide capture lands around 0.37 scale, which puts the app's
+   own 14px text at roughly 5px — a picture of a table rather than a table. Hold
+   each shot at a legible size and let it pan inside its own scroller instead.
+   The page itself still never scrolls sideways, and the cut-off edge is the
+   affordance that there is more to see. */
+@media (max-width: 780px) {
+  /* A grid item defaults to min-width: auto, so it grows to fit its content —
+     the panel would widen to 720px and take the page sideways with it, which is
+     the one thing that must not happen. Let the item shrink so the overflow
+     lands inside the panel where it belongs. */
+  .panel-stack > *,
+  .panel-pair > *,
+  .invoice-layout > *,
+  .hero > * {
+    min-width: 0;
+  }
+
+  .panel {
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Set per shot: zero for captures that already read when they fit. */
+  .panel-img {
+    min-width: var(--shot-min, 0px);
+  }
+
+  .hero-shot .panel-img {
+    min-width: 900px;
+  }
+
+  .panel-paper .panel-img {
+    min-width: 560px;
+  }
+
+  .panel::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .panel::-webkit-scrollbar-thumb {
+    border-radius: 99px;
+    background: color-mix(in oklab, var(--text) 22%, transparent);
+  }
+}
+
 .panel-stack {
   display: grid;
   gap: 16px;
@@ -824,6 +872,65 @@ kbd {
   font-family: var(--font-mono);
   font-size: 12.5px;
   color: var(--faint);
+}
+
+/* The narrowest phones still in use: brand, language, theme and the call to
+   action do not all fit at full size, and the header is the one row that cannot
+   wrap without looking broken. Tighten it rather than dropping a control. */
+@media (max-width: 380px) {
+  .sheet {
+    padding-inline: 16px;
+  }
+
+  .masthead-inner {
+    gap: 10px;
+  }
+
+  .masthead-tools {
+    gap: 6px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .wordmark {
+    font-size: 15.5px;
+  }
+
+  .btn-sm {
+    height: 34px;
+    padding-inline: 12px;
+    font-size: 13.5px;
+  }
+
+  .icon-btn,
+  .lang-btn {
+    height: 34px;
+    min-width: 34px;
+    padding-inline: 8px;
+  }
+}
+
+/* 320px, and the English call to action is two characters longer than the
+   Vietnamese one — enough to push the row over. Squeeze the gutter rather than
+   drop a control. */
+@media (max-width: 344px) {
+  .sheet {
+    padding-inline: 12px;
+  }
+
+  .masthead-tools {
+    gap: 5px;
+  }
+
+  .btn-sm {
+    padding-inline: 10px;
+  }
+
+  .wordmark {
+    font-size: 15px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

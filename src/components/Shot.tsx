@@ -36,6 +36,11 @@ export function Shot({
   const dark = paper ? `/shots/${lang}-${name}.webp` : `/shots/${lang}-dark-${name}.webp`;
   const light = paper ? `/shots/${lang}-${name}.webp` : `/shots/${lang}-light-${name}.webp`;
 
+  // On a phone a wide capture has to be held at a legible size and panned. A
+  // narrow one already reads when it fits, and forcing it to pan — or worse,
+  // blowing it up past its own pixels — would only make it harder to look at.
+  const mobileMin = width > 700 ? Math.min(width, 720) : 0;
+
   return (
     <div className={paper ? `${className} panel-paper` : className}>
       <div
@@ -46,6 +51,7 @@ export function Shot({
           {
             '--shot-dark': `url(${dark})`,
             '--shot-light': `url(${light})`,
+            '--shot-min': `${mobileMin}px`,
             aspectRatio: `${width} / ${height}`,
           } as React.CSSProperties
         }
