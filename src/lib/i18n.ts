@@ -125,6 +125,10 @@ const vi = {
   'feat.langKey': 'Song ngữ',
   'feat.langTitle': 'Tiếng Việt và English',
   'feat.langBody': 'Đổi ngôn ngữ ngay trên header. Hoá đơn in ra theo đúng ngôn ngữ đang chọn.',
+  'feat.extKey': 'Extension',
+  'feat.extTitle': 'Bấm giờ ngay từ thanh công cụ Chrome',
+  'feat.extBody':
+    'Cài tiện ích mở rộng, chọn dự án, bấm là chạy — không cần mở tab app. Đồng bộ qua đúng tài khoản bạn đã đăng nhập.',
 
   'keys.start': 'bắt đầu / dừng timer, ở bất kỳ trang nào',
   'keys.manual': 'thêm log thủ công',
@@ -286,6 +290,10 @@ const en: Record<Key, string> = {
   'feat.langTitle': 'Vietnamese and English',
   'feat.langBody':
     'Switch language from the header. Invoices print in whichever language is selected.',
+  'feat.extKey': 'Extension',
+  'feat.extTitle': 'Track time right from the Chrome toolbar',
+  'feat.extBody':
+    'Install the extension, pick a project, click to start — no app tab required. Syncs through the same signed-in account.',
 
   'keys.start': 'start / stop the timer, from any page',
   'keys.manual': 'add a manual entry',

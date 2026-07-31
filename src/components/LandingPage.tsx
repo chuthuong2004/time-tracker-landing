@@ -36,6 +36,7 @@ const FEATURES: { key: Key; title: Key; body: Key }[] = [
   { key: 'feat.currencyKey', title: 'feat.currencyTitle', body: 'feat.currencyBody' },
   { key: 'feat.roundKey', title: 'feat.roundTitle', body: 'feat.roundBody' },
   { key: 'feat.langKey', title: 'feat.langTitle', body: 'feat.langBody' },
+  { key: 'feat.extKey', title: 'feat.extTitle', body: 'feat.extBody' },
 ];
 
 const SHORTCUTS: { keys: string[]; action: Key }[] = [
