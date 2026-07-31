@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Be_Vietnam_Pro, JetBrains_Mono } from 'next/font/google';
 import { NO_FLASH_SCRIPT } from '@/components/ThemeToggle';
-import { SITE_URL } from '@/lib/site';
+import { t } from '@/lib/i18n';
+import { GOOGLE_SITE_VERIFICATION, SITE_URL } from '@/lib/site';
 import './globals.css';
 
 /* Two faces, and the first one is the whole argument: Be Vietnam Pro is drawn
@@ -26,16 +27,37 @@ const mono = JetBrains_Mono({
   display: 'swap',
 });
 
-const TITLE = 'Time Tracker — Bấm giờ và xuất hoá đơn cho freelancer';
-const DESCRIPTION =
-  'Bấm một phím là đồng hồ chạy, tiền cộng dồn theo từng giây. Gộp giờ chưa xuất thành hoá đơn PDF, đồng bộ mọi thiết bị, offline vẫn dùng được. Miễn phí.';
+const TITLE = t('vi', 'meta.title');
+const DESCRIPTION = t('vi', 'meta.description');
+
+/* `x-default` points at the Vietnamese page: this is a Vietnamese product on a
+   .io.vn domain, so an unmatched locale should land there rather than on /en. */
+export const LANGUAGE_ALTERNATES = { vi: '/', en: '/en', 'x-default': '/' };
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  // The template appends the brand, so a page title must not carry it itself —
+  // the home pages set `absolute` for that reason.
   title: { default: TITLE, template: '%s — Time Tracker' },
   description: DESCRIPTION,
-  keywords: ['bấm giờ', 'time tracking', 'hoá đơn', 'freelancer', 'tính tiền theo giờ', 'timesheet'],
-  alternates: { canonical: '/', languages: { vi: '/', en: '/en' } },
+  applicationName: 'Time Tracker',
+  keywords: [
+    'bấm giờ',
+    'phần mềm bấm giờ',
+    'time tracking',
+    'phần mềm quản lý thời gian',
+    'xuất hoá đơn freelancer',
+    'hoá đơn',
+    'freelancer',
+    'tính tiền theo giờ',
+    'timesheet',
+    'ứng dụng chấm công freelance',
+  ],
+  category: 'productivity',
+  authors: [{ name: 'Time Tracker', url: SITE_URL }],
+  creator: 'Time Tracker',
+  publisher: 'Time Tracker',
+  alternates: { canonical: '/', languages: LANGUAGE_ALTERNATES },
   openGraph: {
     type: 'website',
     url: SITE_URL,
@@ -43,9 +65,27 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     locale: 'vi_VN',
+    alternateLocale: ['en_US'],
   },
   twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      // Let Google show a full-length text snippet and a large image thumbnail
+      // instead of the short defaults it falls back to for an unknown site.
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
+  },
+  // Unset unless a URL-prefix property is verified by HTML tag; see site.ts.
+  verification: GOOGLE_SITE_VERIFICATION ? { google: GOOGLE_SITE_VERIFICATION } : undefined,
+  // Vietnamese copy contains dates and long digit strings, and Safari will
+  // otherwise turn them into tel: links.
+  formatDetection: { telephone: false, date: false, address: false, email: false },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -18,8 +18,19 @@ export function otherLang(lang: Lang): Lang {
 }
 
 const vi = {
+  // The head copy lives here with everything else so the page metadata, the
+  // JSON-LD and the generated share image cannot drift out of step.
+  'meta.title': 'Time Tracker — Bấm giờ và xuất hoá đơn cho freelancer',
+  'meta.description':
+    'Bấm một phím là đồng hồ chạy, tiền cộng dồn theo từng giây. Gộp giờ chưa xuất thành hoá đơn PDF, đồng bộ mọi thiết bị, offline vẫn dùng được. Miễn phí.',
+  'meta.ogAlt':
+    'Time Tracker — đồng hồ đang chạy 02:14:37 và số tiền cộng dồn theo từng giây',
+  'og.headline': 'Giờ của bạn là tiền. Đếm cho đủ.',
+  'og.sub': 'Bấm giờ theo dự án, xuất hoá đơn PDF. Offline vẫn chạy.',
+
   'nav.day': 'Một ngày',
   'nav.features': 'Tính năng',
+  'nav.faq': 'Hỏi đáp',
   'nav.pricing': 'Giá',
   'nav.openApp': 'Mở app',
   'nav.theme': 'Giao diện',
@@ -120,6 +131,40 @@ const vi = {
   'keys.palette': 'command palette — nhảy tới đâu cũng được',
   'keys.theme': 'đổi nền sáng / tối',
 
+  'faq.at': '—',
+  'faq.note': 'Những câu hỏi hay gặp trước khi bắt đầu.',
+  'faq.title': 'Câu hỏi thường gặp',
+  'faq.q1': 'Time Tracker có miễn phí không?',
+  'faq.a1':
+    'Miễn phí, không giới hạn dự án, log hay hoá đơn. Không cần thẻ và không có bản trả phí nào để nâng cấp lên.',
+  'faq.q2': 'Mất mạng có bấm giờ được không?',
+  'faq.a2':
+    'Được. App chạy local-first: mọi thao tác ghi xuống máy trước, nên bạn cứ bấm giờ và sửa log như thường. Khi mạng về, thay đổi tự đẩy lên cloud.',
+  'faq.q3': 'Dữ liệu của tôi nằm ở đâu?',
+  'faq.a3':
+    'Một bản trong máy bạn để app chạy được khi offline, một bản trên Postgres của Supabase gắn với tài khoản đăng nhập. Tải bản sao lưu JSON hoặc CSV bất cứ lúc nào.',
+  'faq.q4': 'Xuất hoá đơn PDF được không?',
+  'faq.a4':
+    'Được. Chọn dự án và kỳ làm việc, app gom mọi entry chưa xuất, làm tròn theo cấu hình của bạn, cộng VAT và cấp số hoá đơn tự tăng. In ra hoặc lưu PDF từ hộp thoại in.',
+  'faq.q5': 'Có tính được nhiều loại tiền không?',
+  'faq.a5':
+    'VND, USD, EUR và SGD. Mỗi dự án có rate và loại tiền riêng; báo cáo cộng riêng từng loại chứ không tự quy đổi hộ bạn.',
+  'faq.q6': 'App làm tròn giờ như thế nào?',
+  'faq.a6':
+    'Lên hoặc về gần nhất, theo bước 5, 6, 10, 15 hoặc 30 phút. Báo cáo đặt giờ thật cạnh giờ tính tiền, nên bạn thấy việc làm tròn cộng thêm bao nhiêu trước khi chốt.',
+  'faq.q7': 'Cài trên điện thoại được không?',
+  'faq.a7':
+    'Được, app là PWA. Thêm vào Home Screen trên iOS hoặc Android, hoặc vào Dock trên máy tính, mở ra là chạy toàn màn hình, không thanh địa chỉ.',
+  'faq.q8': 'Đăng nhập có cần mật khẩu không?',
+  'faq.a8':
+    'Không. Đăng nhập bằng Google hoặc bằng magic link gửi qua email — không có mật khẩu nào để đặt, cũng không có mật khẩu nào để mất.',
+  'faq.q9': 'Khác gì Toggl hay Clockify?',
+  'faq.a9':
+    'Nhỏ hơn, và làm sẵn phần Việt Nam: giao diện tiếng Việt, rate theo VND, hoá đơn có VAT in ra được ngay. Không có quản lý team hay tính lương — đây là công cụ cho một người làm freelance.',
+  'faq.q10': 'Lấy dữ liệu ra được không?',
+  'faq.a10':
+    'Sổ giờ và báo cáo xuất được CSV, toàn bộ dữ liệu tải được thành một file JSON trong Cài đặt. Không có bước nào giữ dữ liệu lại.',
+
   'price.total': 'Tổng thanh toán',
   'price.title': 'Miễn phí. Bắt đầu bằng một phím.',
   'price.lede':
@@ -135,8 +180,16 @@ const vi = {
 export type Key = keyof typeof vi;
 
 const en: Record<Key, string> = {
+  'meta.title': 'Time Tracker — Track hours, send invoices',
+  'meta.description':
+    'One key starts the clock and the money adds up by the second. Turn uninvoiced hours into a PDF invoice, sync across devices, keep working offline. Free.',
+  'meta.ogAlt': 'Time Tracker — a clock running at 02:14:37 with money adding up by the second',
+  'og.headline': 'Your hours are money. Count all of them.',
+  'og.sub': 'Track time per project, invoice it as a PDF. Works offline.',
+
   'nav.day': 'A day',
   'nav.features': 'Features',
+  'nav.faq': 'FAQ',
   'nav.pricing': 'Pricing',
   'nav.openApp': 'Open app',
   'nav.theme': 'Theme',
@@ -238,6 +291,40 @@ const en: Record<Key, string> = {
   'keys.manual': 'add a manual entry',
   'keys.palette': 'command palette — jump anywhere',
   'keys.theme': 'switch light / dark',
+
+  'faq.at': '—',
+  'faq.note': 'The questions that come up first.',
+  'faq.title': 'Common questions',
+  'faq.q1': 'Is Time Tracker free?',
+  'faq.a1':
+    'Free, with no cap on projects, entries or invoices. No card, and no paid tier waiting to be upgraded to.',
+  'faq.q2': 'Can I track time with no connection?',
+  'faq.a2':
+    'Yes. The app is local-first: every action is written to your device first, so you keep starting timers and editing entries as usual. The changes go up to the cloud the moment the connection is back.',
+  'faq.q3': 'Where is my data kept?',
+  'faq.a3':
+    'One copy on your device so the app works offline, and one in Supabase Postgres tied to the account you signed in with. Download a JSON backup or a CSV whenever you want.',
+  'faq.q4': 'Can it produce a PDF invoice?',
+  'faq.a4':
+    'Yes. Pick a project and a period; the app gathers every uninvoiced entry, rounds it the way you set, adds VAT and assigns an auto-incrementing number. Print it, or save a PDF from the print dialog.',
+  'faq.q5': 'Does it handle more than one currency?',
+  'faq.a5':
+    'VND, USD, EUR and SGD. Each project carries its own rate and currency, and reports total each currency separately rather than converting on your behalf.',
+  'faq.q6': 'How does it round hours?',
+  'faq.a6':
+    'Up or to nearest, in steps of 5, 6, 10, 15 or 30 minutes. Reports put actual hours next to billable hours, so you can see what the rounding adds before you commit to it.',
+  'faq.q7': 'Can I install it on a phone?',
+  'faq.a7':
+    'Yes, the app is a PWA. Add it to the Home Screen on iOS or Android, or to the Dock on a desktop, and it opens full screen with no address bar.',
+  'faq.q8': 'Do I need a password?',
+  'faq.a8':
+    'No. Sign in with Google, or with a magic link sent to your email — there is no password to set, and none to lose.',
+  'faq.q9': 'How is this different from Toggl or Clockify?',
+  'faq.a9':
+    'It is smaller, and the Vietnamese part is already done: a Vietnamese interface, rates in VND, and invoices with VAT you can print straight away. There is no team management or payroll — this is a tool for one freelancer.',
+  'faq.q10': 'Can I get my data out?',
+  'faq.a10':
+    'The time log and the reports export to CSV, and Settings downloads everything as a single JSON file. Nothing in the flow holds your data in.',
 
   'price.total': 'Amount due',
   'price.title': 'Free. Starts with one key.',

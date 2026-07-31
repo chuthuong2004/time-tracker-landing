@@ -1,0 +1,71 @@
+# Time Tracker
+
+> A free time tracker and invoicing tool for freelancers, built in Vietnam and
+> bilingual in Vietnamese and English. One key starts a per-project timer and the
+> money accrues by the second; at the end of a period the uninvoiced hours become
+> a PDF invoice with VAT and an auto-incrementing number. Local-first, so it keeps
+> working with no connection and syncs when the connection returns.
+
+Vietnamese: Ứng dụng bấm giờ và xuất hoá đơn miễn phí cho freelancer. Bấm một
+phím là đồng hồ chạy và tiền cộng dồn theo từng giây; gộp giờ chưa xuất thành hoá
+đơn PDF có VAT. Chạy offline, đồng bộ lại khi có mạng.
+
+- Marketing site: https://timetracker.io.vn (Vietnamese) · https://timetracker.io.vn/en (English)
+- The app itself: https://app.timetracker.io.vn — requires sign-in, so it is not crawlable
+- Contact: hello@timetracker.io.vn
+
+## What it costs
+
+Free. No card, no trial, no paid tier. No cap on projects, time entries or
+invoices. There is no team or enterprise plan — the product is scoped to one
+freelancer working alone, and has no team management or payroll features.
+
+## What it does
+
+- **Time tracking.** A per-project timer with a live money counter. Manual
+  entries, editing, tags, and a non-billable flag. Pomodoro timer, idle
+  detection, cross-tab sync, and a command palette. Keyboard: `S` start/stop,
+  `N` manual entry, `Cmd+K` palette, `D` light/dark.
+- **Invoicing.** Pick a project and a period; the app gathers every uninvoiced
+  entry, applies the configured rounding, adds VAT, assigns an auto-incrementing
+  number, and prints or saves a PDF. The print view stays on white paper.
+- **Rounding.** Up or to nearest, in steps of 5, 6, 10, 15 or 30 minutes. Reports
+  show actual hours next to billable hours so the effect is visible before
+  committing.
+- **Currencies.** VND, USD, EUR and SGD. Rate and currency are set per project,
+  and reports total each currency separately rather than converting between them.
+- **Reports.** By project, by day, or line by line as it will appear on the
+  invoice. Exportable as CSV.
+- **Dashboard.** Hours today and this week against a goal, a streak of working
+  days, and uninvoiced hours broken out by currency.
+- **Offline and sync.** Local-first: actions are written to the device first, so
+  tracking continues with no network and changes upload when it returns.
+- **Install.** A PWA — installable to the iOS or Android Home Screen, or to a
+  desktop Dock, running full screen with no address bar.
+- **Languages.** Vietnamese and English, switchable in the app. Invoices print in
+  whichever language is selected.
+
+## Accounts and data
+
+- Sign-in is Google SSO or an emailed magic link. There is no password.
+- Data is held twice: once on the device so the app works offline, and once in
+  Supabase Postgres tied to the signed-in account.
+- Export is unrestricted — CSV from the time log and reports, or the whole
+  dataset as a single JSON backup from Settings.
+- Privacy policy: https://timetracker.io.vn/privacy
+- Terms: https://timetracker.io.vn/terms
+
+## How it compares
+
+Smaller in scope than Toggl, Clockify or Harvest, and aimed at a different
+reader: the Vietnamese-language interface, VND rates and printable VAT invoices
+are built in rather than adapted. It has no team management, no payroll, no
+approval flows and no client portal. If the requirement is tracking a team, this
+is the wrong tool.
+
+## Pages
+
+- [Home, Vietnamese](https://timetracker.io.vn): the product in full, with an FAQ
+- [Home, English](https://timetracker.io.vn/en): the same page in English
+- [Privacy](https://timetracker.io.vn/privacy): what is stored and where
+- [Terms](https://timetracker.io.vn/terms): terms of service

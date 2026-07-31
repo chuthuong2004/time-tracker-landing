@@ -23,15 +23,25 @@ function Tools({ lang, path }: { lang: Lang; path: string }) {
   );
 }
 
+/**
+ * `lang` is set on the page landmarks, not just on `<html>`.
+ *
+ * The root layout owns the single `<html>` tag for both languages and has to
+ * hardcode one of them, which left every English page declaring itself
+ * Vietnamese. The nearest `lang` wins, so tagging the landmarks is what tells a
+ * screen reader — and Bing, which reads the attribute where Google reads
+ * `hreflang` — that these pages are English.
+ */
 export function Masthead({ lang, path = '', nav = true }: { lang: Lang; path?: string; nav?: boolean }) {
   return (
-    <header className="masthead">
+    <header className="masthead" lang={lang}>
       <div className="sheet masthead-inner">
         <Brand href={pathFor(lang)} />
         {nav ? (
           <nav className="masthead-nav">
             <a href="#day">{t(lang, 'nav.day')}</a>
             <a href="#features">{t(lang, 'nav.features')}</a>
+            <a href="#faq">{t(lang, 'nav.faq')}</a>
             <a href="#pricing">{t(lang, 'nav.pricing')}</a>
           </nav>
         ) : (
@@ -45,7 +55,7 @@ export function Masthead({ lang, path = '', nav = true }: { lang: Lang; path?: s
 
 export function Colophon({ lang, home = false }: { lang: Lang; home?: boolean }) {
   return (
-    <footer className="colophon">
+    <footer className="colophon" lang={lang}>
       <div className="sheet colophon-inner">
         <Brand href={pathFor(lang)} />
         <div className="colophon-links">

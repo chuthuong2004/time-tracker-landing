@@ -6,7 +6,7 @@ function Shell({ lang, path, children }: { lang: Lang; path: string; children: R
   return (
     <>
       <Masthead lang={lang} path={path} nav={false} />
-      <main className="sheet">
+      <main className="sheet" lang={lang}>
         <article className="doc">{children}</article>
       </main>
       <Colophon lang={lang} />

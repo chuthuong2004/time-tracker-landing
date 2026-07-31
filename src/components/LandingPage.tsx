@@ -1,6 +1,8 @@
 import { Colophon, Masthead } from '@/components/Chrome';
 import { LiveMeter } from '@/components/LiveMeter';
 import { Caption, Shot } from '@/components/Shot';
+import { StructuredData } from '@/components/StructuredData';
+import { FAQ } from '@/lib/faq';
 import { APP_URL } from '@/lib/site';
 import { t, type Key, type Lang } from '@/lib/i18n';
 
@@ -46,9 +48,14 @@ const SHORTCUTS: { keys: string[]; action: Key }[] = [
 export function LandingPage({ lang }: { lang: Lang }) {
   return (
     <>
+      <StructuredData
+        lang={lang}
+        title={t(lang, 'meta.title')}
+        description={t(lang, 'meta.description')}
+      />
       <Masthead lang={lang} />
 
-      <main>
+      <main lang={lang}>
         <div className="sheet">
           {/* The fold carries the product twice: a meter that is genuinely
               running, and the app itself bleeding off the right edge. */}
@@ -163,6 +170,21 @@ export function LandingPage({ lang }: { lang: Lang }) {
                 </li>
               ))}
             </ul>
+          </Row>
+
+          {/* Answers stay open rather than folding into an accordion. Someone
+              scanning for one fact reads faster, and the machines quoting this
+              page get the answer in the markup instead of behind a summary. */}
+          <Row at={t(lang, 'faq.at')} note={t(lang, 'faq.note')} id="faq">
+            <h2>{t(lang, 'faq.title')}</h2>
+            <div className="faq">
+              {FAQ.map(({ q, a }) => (
+                <div className="faq-item" key={q}>
+                  <h3>{t(lang, q)}</h3>
+                  <p>{t(lang, a)}</p>
+                </div>
+              ))}
+            </div>
           </Row>
         </div>
 

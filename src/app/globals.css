@@ -678,6 +678,46 @@ kbd {
   gap: 4px;
 }
 
+/* ---------- FAQ ----------
+   A ledger of questions: one hairline per row, no boxes. The list reads as part
+   of the timesheet rather than as a widget bolted onto the end of it. */
+
+.faq {
+  margin-top: 34px;
+  border-top: 1px solid var(--hairline);
+}
+
+.faq-item {
+  padding: 22px 0 24px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.faq-item h3 {
+  /* Questions are the reader's entry point, so they hold their weight at a size
+     that still sits below the section's own h2. */
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.faq-item p {
+  max-width: 68ch;
+  margin-top: 9px;
+  font-size: 14.5px;
+  color: var(--muted);
+}
+
+@media (min-width: 760px) {
+  .faq-item {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 28px;
+  }
+
+  .faq-item p {
+    margin-top: 0;
+  }
+}
+
 /* ---------- Total line ----------
    The page bills itself, in the shape of the invoice footer the product prints,
    and the amount is the pricing. */
