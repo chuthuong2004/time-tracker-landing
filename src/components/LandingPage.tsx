@@ -3,7 +3,7 @@ import { LiveMeter } from '@/components/LiveMeter';
 import { Caption, Shot } from '@/components/Shot';
 import { StructuredData } from '@/components/StructuredData';
 import { FAQ } from '@/lib/faq';
-import { APP_URL } from '@/lib/site';
+import { APP_URL, EXTENSION_STORE_URL } from '@/lib/site';
 import { t, type Key, type Lang } from '@/lib/i18n';
 
 /** Each section is one beat of a working day, and the rail says which. */
@@ -29,14 +29,14 @@ function Row({
   );
 }
 
-const FEATURES: { key: Key; title: Key; body: Key }[] = [
+const FEATURES: { key: Key; title: Key; body: Key; href?: string; cta?: Key }[] = [
   { key: 'feat.offlineKey', title: 'feat.offlineTitle', body: 'feat.offlineBody' },
   { key: 'feat.syncKey', title: 'feat.syncTitle', body: 'feat.syncBody' },
   { key: 'feat.pwaKey', title: 'feat.pwaTitle', body: 'feat.pwaBody' },
   { key: 'feat.currencyKey', title: 'feat.currencyTitle', body: 'feat.currencyBody' },
   { key: 'feat.roundKey', title: 'feat.roundTitle', body: 'feat.roundBody' },
   { key: 'feat.langKey', title: 'feat.langTitle', body: 'feat.langBody' },
-  { key: 'feat.extKey', title: 'feat.extTitle', body: 'feat.extBody' },
+  { key: 'feat.extKey', title: 'feat.extTitle', body: 'feat.extBody', href: EXTENSION_STORE_URL, cta: 'feat.extCta' },
 ];
 
 const SHORTCUTS: { keys: string[]; action: Key }[] = [
@@ -155,6 +155,11 @@ export function LandingPage({ lang }: { lang: Lang }) {
                   <span className="feature-key">{t(lang, feature.key)}</span>
                   <h3>{t(lang, feature.title)}</h3>
                   <p>{t(lang, feature.body)}</p>
+                  {feature.href && feature.cta ? (
+                    <a className="feature-link" href={feature.href} target="_blank" rel="noopener noreferrer">
+                      {t(lang, feature.cta)} ↗
+                    </a>
+                  ) : null}
                 </div>
               ))}
             </div>

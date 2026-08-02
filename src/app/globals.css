@@ -628,6 +628,19 @@ p {
   color: var(--muted);
 }
 
+.feature-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13.5px;
+  font-weight: 560;
+  color: var(--action);
+  text-decoration: none;
+}
+
+.feature-link:hover {
+  text-decoration: underline;
+}
+
 .feature-key {
   display: block;
   margin-bottom: 13px;

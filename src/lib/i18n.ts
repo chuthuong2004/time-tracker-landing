@@ -129,6 +129,7 @@ const vi = {
   'feat.extTitle': 'Bấm giờ ngay từ thanh công cụ Chrome',
   'feat.extBody':
     'Cài tiện ích mở rộng, chọn dự án, bấm là chạy — không cần mở tab app. Đồng bộ qua đúng tài khoản bạn đã đăng nhập.',
+  'feat.extCta': 'Thêm vào Chrome',
 
   'keys.start': 'bắt đầu / dừng timer, ở bất kỳ trang nào',
   'keys.manual': 'thêm log thủ công',
@@ -294,6 +295,7 @@ const en: Record<Key, string> = {
   'feat.extTitle': 'Track time right from the Chrome toolbar',
   'feat.extBody':
     'Install the extension, pick a project, click to start — no app tab required. Syncs through the same signed-in account.',
+  'feat.extCta': 'Add to Chrome',
 
   'keys.start': 'start / stop the timer, from any page',
   'keys.manual': 'add a manual entry',

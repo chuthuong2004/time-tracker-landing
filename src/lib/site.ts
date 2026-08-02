@@ -1,6 +1,8 @@
 export const APP_URL = 'https://app.timetracker.io.vn';
 export const SITE_URL = 'https://timetracker.io.vn';
 export const CONTACT = 'hello@timetracker.io.vn';
+/** Chrome Web Store item id `dbiopdgldlipmceikamdmpkaomhoaich` — live as of 2026-08-02. */
+export const EXTENSION_STORE_URL = 'https://chromewebstore.google.com/detail/dbiopdgldlipmceikamdmpkaomhoaich';
 /** Written once, shown on every legal page. */
 export const LAST_UPDATED = '30/07/2026';
 
